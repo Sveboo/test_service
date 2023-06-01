@@ -11,10 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # This step checks out a copy of the repository.
       - uses: actions/checkout@v3
-        # This step set up the correct Python version for the workflow runner,
-        # depending on the project’s version
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -26,29 +23,44 @@ jobs:
           pip install ruff pytest web.py
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
       - name: Lint
         uses: py-actions/flake8@v2
 
-      - name: Test
-        run: |
-          pytest
+  test:
+        runs-on: ubuntu-latest
+
+        steps:
+          - uses: actions/checkout@v3
+          - name: Test
+            run: |
+              pytest
 
 #      - name: Upload artifacts
 #        uses: actions/upload-artifact@v3
 #        with:
 #          path: ./
 
-      - name: Archive
-        run: |
-          sudo apt-get update
-          sudo apt-get install zip
-          zip -r archive.zip *
+  archive:
+      needs: [build, lint, test]
+      runs-on: ubuntu-latest
 
-      - name: Upload to gdrive
-        uses: adityak74/google-drive-upload-git-action@main
-        with:
-          credentials: ${{ secrets.credentials }}
-          filename: "archive.zip"
-          folderId: ${{ secrets.folderId }}
-          name: "documentation.zip"
-          overwrite: "true"
+      steps:
+        - name: Archive
+          run: |
+            sudo apt-get update
+            sudo apt-get install zip
+            zip -r archive.zip *
+
+        - name: Upload to gdrive
+          uses: adityak74/google-drive-upload-git-action@main
+          with:
+            credentials: ${{ secrets.credentials }}
+            filename: "archive.zip"
+            folderId: ${{ secrets.folderId }}
+            name: "documentation.zip"
+            overwrite: "true"
