@@ -22,7 +22,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install ruff pytest web.py
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
+      - name: Test
+        run: |
+          pytest
   lint:
     runs-on: ubuntu-latest
 
@@ -31,22 +33,13 @@ jobs:
       - name: Lint
         uses: py-actions/flake8@v2
 
-  test:
-        runs-on: ubuntu-latest
-
-        steps:
-          - uses: actions/checkout@v3
-          - name: Test
-            run: |
-              pytest
-
 #      - name: Upload artifacts
 #        uses: actions/upload-artifact@v3
 #        with:
 #          path: ./
 
   archive:
-      needs: [build, lint, test]
+      needs: [build, lint]
       runs-on: ubuntu-latest
 
       steps:
