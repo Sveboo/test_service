@@ -1,8 +1,6 @@
 import web
 
-urls = (
-    '/(.*)', 'Hello'
-)
+urls = ('/(.*)', 'Hello')
 app = web.application(urls, globals())
 
 
