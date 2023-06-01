@@ -27,7 +27,7 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Lint
-        uses: ricardochaves/python-lint@v1.4.0
+        uses: py-actions/flake8@v2
 
       - name: Test
         run: |
