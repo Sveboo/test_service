@@ -27,3 +27,14 @@ jobs:
         with:
           push: true
           tags: sveboo/service:latest
+
+  deploy:
+    needs: [docker]
+    runs-on: self-hosted
+    steps:
+      -
+        name: pull from dockerhub
+        run: docker pull sveboo/service:latest
+
+      - name: run dockerimage
+        run: docker run -d sveboo/service:latest
