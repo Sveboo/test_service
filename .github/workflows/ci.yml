@@ -37,4 +37,4 @@ jobs:
         run: docker pull sveboo/service:latest
 
       - name: run dockerimage
-        run: docker run -d sveboo/service:latest
+        run: docker run -d -p 80:8080 sveboo/service:latest
