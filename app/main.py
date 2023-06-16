@@ -9,7 +9,7 @@ class Hello:
     def GET(name):
         if not name:
             name = 'world'
-        return 'Hello, ' + name + '!'
+        return '!Hello, ' + name + '!'
 
 
 if __name__ == "__main__":
